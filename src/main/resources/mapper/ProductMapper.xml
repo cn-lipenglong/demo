@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nantian.demo.dao.ProductDao" >
+    
+    <resultMap id="productMap" type="product" autoMapping="true" />
+    <sql id="productColumns">
+        id as "id",
+        name as "name",
+        price as "price"
+    </sql>
+
+    <insert id="add" useGeneratedKeys="true" keyProperty="id">
+        insert into product(id, name, price)
+        values (#{id}, #{name}, #{price})
+    </insert>
+
+    <select id="findById" resultMap="productMap">
+        select
+          <include refid="productColumns" />
+        from product
+        where id = #{id}
+    </select>
+
+    <select id="findAll" resultMap="productMap">
+        select
+          <include refid="productColumns" />
+        from product order by price asc
+    </select>
+</mapper>

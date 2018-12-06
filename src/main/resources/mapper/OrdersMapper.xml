@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nantian.demo.dao.OrdersDao" >
+
+    <sql id="ordersColumns">
+      o.id as "id",
+      o.order_num as "orderNum",
+      o.order_status as "orderStatus",
+      o.order_amount as "orderAmount",
+      o.paid_amount as "paidAmount",
+      p.id as "product.id",
+      p.name as "product.name",
+      p.price as "product.price",
+      o.buy_counts as "buyCounts",
+      o.create_time as "createTime",
+      o.paid_time as "paidTime"
+    </sql>
+    
+    <sql id="ordersJoins">
+        left join product p on o.product_id = p.id
+    </sql>
+    
+    <resultMap id="ordersMap" type="Orders" autoMapping="true">
+        <collection property="product" ofType="Product">
+            <id column="product_id" property="id"></id>
+        </collection>
+    </resultMap>
+
+    <insert id="add" parameterType="Orders">
+        insert into orders (id, order_num, order_status, order_amount, paid_amount, product_id, buy_counts, create_time,
+                            paid_time)
+        values (#{id}, #{orderNum}, #{orderStatus}, #{orderAmount}, #{paidAmount},
+                #{product.id}, #{buyCounts}, #{createTime}, #{paidTime})
+    </insert>
+
+    <update id="update" parameterType="Orders">
+        update orders set
+          id = #{id}, order_num = #{orderNum}, order_status = #{orderStatus}, order_amount = #{orderAmount},
+          paid_amount = #{paidAmount}, product_id = #{product.id}, buy_counts = #{buyCounts},
+          create_time = #{createTime}, paid_time = #{paidTime}
+    </update>
+
+    <select id="findAll" resultMap="ordersMap">
+        select
+          <include refid="ordersColumns" />
+        from orders o
+          <include refid="ordersJoins" />
+        order by o.create_time desc
+    </select>
+    <select id="findById" resultMap="ordersMap">
+        select
+          <include refid="ordersColumns" />
+        from orders o
+          <include refid="ordersJoins" />
+        where o.id = #{id}
+    </select>
+
+</mapper>

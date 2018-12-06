@@ -1,0 +1,21 @@
+server:
+  port: 8088
+spring:
+  devtools:
+    restart:
+      enabled: true
+  datasource:
+    url: jdbc:mysql://localhost:3306/demo?useUnicode=true&characterEncoding=utf-8&serverTimezone = GMT%2B8
+    username: root
+    password: admin
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  mvc:
+    view:
+      prefix: /jsp/
+      suffix: .jsp
+  resources:
+    static-locations: /static/
+# mybatis扫描
+mybatis:
+  mapper-locations: classpath*:mapper/*.xml
+  type-aliases-package: com.nantian.demo.domain
